@@ -1,0 +1,5 @@
+Types: deb
+URIs: https://repo.protonvpn.com/debian
+Suites: unstable
+Components: main
+Signed-By: /usr/share/keyrings/protonvpn-beta-archive-keyring.gpg
