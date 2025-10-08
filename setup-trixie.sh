@@ -234,6 +234,17 @@ function installVisualStudioCode() {
 	sudo apt install code
 }
 
+function installAdwGtk3() {
+	echo;echo ">>> Installing and enabling libAdwaita theme for GTK3"
+	curl -s https://julianfairfax.codeberg.page/package-repo/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/julians-package-repo.gpg
+	echo 'deb [ signed-by=/usr/share/keyrings/julians-package-repo.gpg ] https://julianfairfax.codeberg.page/package-repo/debs packages main' | sudo tee /etc/apt/sources.list.d/julians-package-repo.list
+	sudo apt update
+	sudo apt install awd-gtk3 -y
+	gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3' && gsettings set org.gnome.desktop.interface color-scheme 'default'
+	# To revert to the default GTK3 theme, use:
+	# gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita' && gsettings set org.gnome.desktop.interface color-scheme 'default'
+}
+
 
 ################################################################################
 # Main
@@ -258,6 +269,7 @@ ARCH=$(dpkg --print-architecture)
 
 ### Installing packages, global
 #installCorePackages
+#installAdwGtk3
 #installRPImager
 #installSublime
 #installBrave
@@ -271,4 +283,4 @@ ARCH=$(dpkg --print-architecture)
 #installSignal
 #installEnteAuthenticator
 #installIcloudNotes
-installVisualStudioCode
+#installVisualStudioCode
