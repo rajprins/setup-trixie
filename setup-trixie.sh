@@ -6,6 +6,7 @@ export PS1='\[\e]133;D;$?\e\\\e]133;A\e\\\]\[\e]0;\u@\h: \w\a\]\[\033[38;5;208m\
 EOF
 }
 
+
 ### Set some aliases
 function setAliases() {
 	echo;echo ">>> Setting aliases"
@@ -86,11 +87,15 @@ function installProton() {
 ### Raspberry Pi Imager
 function installRPImager() {
 	echo;echo ">>> Installing Raspberry Pi Imager"
-	local PACKAGE=imager_latest_amd64.deb
-	wget https://downloads.raspberrypi.com/imager/$PACKAGE
-	sudo apt install libfuse2t64 -y
-	sudo dpkg -i $PACKAGE
-	rm $PACKAGE
+	if [[ $ARCH == "amd64" ]] ; then
+		local PACKAGE=imager_latest_amd64.deb
+		wget https://downloads.raspberrypi.com/imager/$PACKAGE
+		sudo apt install libfuse2t64 -y
+		sudo dpkg -i $PACKAGE
+		rm $PACKAGE
+	else
+		echo "Sorry, RaspberryPi Imager is not supported on your platform architecture (${ARCH})."
+	fi
 }
 
 
@@ -98,12 +103,19 @@ function installRPImager() {
 function installOpensnitch() {
 	echo;echo ">>> Installing OpenSnitch"
 	local VERSION=1.7.2
-	wget https://github.com/evilsocket/opensnitch/releases/download/v${VERSION}/python3-opensnitch-ui_$VERSION-1_all.deb
-	wget https://github.com/evilsocket/opensnitch/releases/download/v${VERSION}/opensnitch_$VERSION-1_amd64.deb
-	sudo apt install ./opensnitch*.deb ./python3-opensnitch-ui*.deb -y
+	if [[ $ARCH == "amd64" || $ARCH == "arm64" ]] ; then
+		wget https://github.com/evilsocket/opensnitch/releases/download/v${VERSION}/python3-opensnitch-ui_$VERSION-1_all.deb
+		wget https://github.com/evilsocket/opensnitch/releases/download/v${VERSION}/opensnitch_$VERSION-1_${ARCH}.deb
+		sudo apt install ./opensnitch_$VERSION-1_amd64.deb ./python3-opensnitch-ui_$VERSION-1_all.deb -y
+		rm python3-opensnitch-ui_$VERSION-1_all.deb
+		rm opensnitch_$VERSION-1_${ARCH}.deb
+	else
+		echo "Sorry, OpenSnitch is not support on your platform architecture (${ARCH})."
+	fi
 }
 
 
+### Tor Browser, x86 only
 function installTorBrowser() {
 	echo;echo ">>> Installing Tor Browser and dependencies"
 	local VERSION=14.5.7
@@ -123,6 +135,8 @@ function installTorBrowser() {
 
 }
 
+
+### Google Chrome, x86 only
 function installGoogleChrome() {
 	echo;echo ">>> Installing Google Chrome"
 	if [[ $ARCH == "amd64" ]] ; then
@@ -136,12 +150,14 @@ function installGoogleChrome() {
 }
 
 
+### Thonny Python IDE
 function installThonny() {
 	echo;echo ">>> Installing Thonny Python IDE"
 	sudo apt install thonny -y
 }
 
 
+### Slack, x86 only
 function installSlack() {
 	echo;echo ">>> Installing Slack"
 	if [[ $ARCH == "amd64" ]] ; then
@@ -156,6 +172,7 @@ function installSlack() {
 }
 
 
+### Github Desktop, x86 only
 function installGithubDesktop() {
 	echo;echo ">>> Installing Github Desktop"
 	if [[ $ARCH == "amd64" ]] ; then
@@ -168,6 +185,7 @@ function installGithubDesktop() {
 }
 
 
+### Signal secure messenger
 function installSignal() {
 	echo;echo ">>> Installing Signal"
 	wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg;
@@ -178,6 +196,8 @@ function installSignal() {
 	rm signal-desktop-keyring.gpg
 }
 
+
+### Enter OPT Authenticator, x86 only
 function installEnteAuthenticator() {
 	echo;echo ">>> Installing Ente Authenticator"
 	if [[ $ARCH == "amd64" ]] ; then
@@ -192,9 +212,41 @@ function installEnteAuthenticator() {
 }
 
 
+### Client for iCloud Notes
+#
+# note: PGP URL returns a 404, so installation is broken!
+#
+function installIcloudNotes() {
+	echo;echo ">>> Installing iCloud Notes client"
+    sudo apt install curl
+    sudo curl -fsSLo /usr/share/keyrings/himel.gpg https://mirror.himelrana.com/himel.gpg
+    echo "deb [signed-by=/usr/share/keyrings/himel.gpg] https://mirror.himelrana.com/ stable main"|sudo tee /etc/apt/sources.list.d/himel-release.list
+    sudo apt update
+    sudo apt install icloud-notes
+}
+
+function installVisualStudioCode() {
+	echo;echo ">>> Installing VisualStudio Code"
+	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+	sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/   
+	sudo sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'   
+	sudo apt update
+	sudo apt install code
+}
+
+
 ################################################################################
 # Main
 ################################################################################
+
+source /etc/os-release
+if [[ $ID != "debian" ]]; then
+	echo
+	echo "Sorry, this script is for Debian only."
+	echo "Exiting..."
+	echo 
+	exit 1
+fi
 
 ARCH=$(dpkg --print-architecture)
 
@@ -218,3 +270,5 @@ ARCH=$(dpkg --print-architecture)
 #installGithubDesktop
 #installSignal
 #installEnteAuthenticator
+#installIcloudNotes
+installVisualStudioCode
