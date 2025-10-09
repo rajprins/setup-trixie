@@ -267,16 +267,20 @@ function installAngryIpScanner() {
 	if [[ $ARCH == "amd64" ]] ; then
 		local PACKAGE=ipscan_${VERSION}_amd64.deb
 		local URL=https://github.com/angryip/ipscan/releases/download/${VERSION}/${PACKAGE}
-
-	else
+		sudo apt install default-jre -y
+		wget $URL
+		sudo dpkg -i ./${PACKAGE}
+		rm $PACKAGE
+	elif [[ $ARCH == "arm64" || $ARCH == "armhf" ]] ; then
 		local PACKAGE=ipscan_${VERSION}_all.deb
 		local URL=https://github.com/angryip/ipscan/releases/download/${VERSION}/${PACKAGE}
+		sudo apt install default-jre libswt-gtk-4-java libswt-cairo-gtk-4-jni -y
+		wget $URL
+		sudo dpkg -i ./${PACKAGE}
+		rm $PACKAGE
+	else
+		echo "Sorry, Angry IP Scanner is not supported on your platform architecture (${ARCH})."
 	fi
-	wget $URL
-
-	sudo apt install default-jre -y
-	sudo dpkg -i ./${PACKAGE}
-	rm $PACKAGE
 }
 
 
