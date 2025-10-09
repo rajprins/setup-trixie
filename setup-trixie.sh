@@ -245,6 +245,24 @@ function installAdwGtk3() {
 	# gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita' && gsettings set org.gnome.desktop.interface color-scheme 'default'
 }
 
+function installAngryIpScanner() {
+	echo;echo ">>> Installing Angry IP Scanner"
+	VERSION=3.9.2
+	if [[ $ARCH == "amd64" ]] ; then
+		local PACKAGE=ipscan_${VERSION}_amd64.deb
+		local URL=https://github.com/angryip/ipscan/releases/download/${VERSION}/${PACKAGE}
+
+	else
+		local PACKAGE=ipscan_${VERSION}_all.deb
+		local URL=https://github.com/angryip/ipscan/releases/download/${VERSION}/${PACKAGE}
+	fi
+	wget $URL
+
+	sudo apt install default-jre -y
+	sudo dpkg -i ./${PACKAGE}
+	rm $PACKAGE
+}
+
 
 ################################################################################
 # Main
@@ -284,3 +302,4 @@ ARCH=$(dpkg --print-architecture)
 #installEnteAuthenticator
 #installIcloudNotes
 #installVisualStudioCode
+#installAngryIpScanner
