@@ -76,11 +76,14 @@ function installTor() {
 ### ProtonVPN
 function installProton() {
 	echo;echo ">>> Installing Proton VPN"
-	wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb
-	sudo dpkg -i ./protonvpn-stable-release_1.0.8_all.deb
+	local VERSION=1.0.8
+	local PACKAGE=protonvpn-stable-release_${VERSION}_all.deb
+	wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/$PACKAGE
+	sudo dpkg -i ./${PACKAGE}
 	sudo apt update
 	sudo apt install -y proton-vpn-gnome-desktop
 	sudo apt install -y libayatana-appindicator3-1 gir1.2-ayatanaappindicator3-0.1 gnome-shell-extension-appindicator
+	rm $PACKAGE
 }
 
 
@@ -228,13 +231,14 @@ function installIcloudNotes() {
 
 # Microsoft Visual Studio Code
 function installVisualStudioCode() {
-	echo;echo ">>> Installing VisualStudio Code"
+	echo;echo ">>> Installing VisualStudio Code (might take some time!)"
 	if [[ $ARCH == "amd64" || $ARCH == "arm64" || $ARCH == "armhf" ]] ; then
 		wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-		sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/   
-		sudo sh -c 'echo "deb [arch=${ARCH} signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'   
+		sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+		echo "deb [arch=${ARCH} signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list 
 		sudo apt update
 		sudo apt install code
+		rm packages.microsoft.gpg
 	else
 		echo "Sorry, VisualStudio Code is not supported on your platform architecture (${ARCH})."
 	fi
