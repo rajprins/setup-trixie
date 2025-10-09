@@ -110,7 +110,7 @@ function installOpensnitch() {
 		rm python3-opensnitch-ui_$VERSION-1_all.deb
 		rm opensnitch_$VERSION-1_${ARCH}.deb
 	else
-		echo "Sorry, OpenSnitch is not support on your platform architecture (${ARCH})."
+		echo "Sorry, OpenSnitch is not supported on your platform architecture (${ARCH})."
 	fi
 }
 
@@ -167,7 +167,7 @@ function installSlack() {
 		sudo apt install ./${PACKAGE}
 		rm $PACKAGE
 	else
-		echo "Sorry, Slack is not support on your platform architecture (${ARCH})."
+		echo "Sorry, Slack is not supported on your platform architecture (${ARCH})."
 	fi
 }
 
@@ -180,7 +180,7 @@ function installGithubDesktop() {
 		sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/mwt-desktop.gpg] https://mirror.mwt.me/shiftkey-desktop/deb/ any main" > /etc/apt/sources.list.d/mwt-desktop.list'
 		sudo apt update && sudo apt install github-desktop -y
 	else
-		echo "Sorry, Github Desktop is not support on your platform architecture (${ARCH})."
+		echo "Sorry, Github Desktop is not supported on your platform architecture (${ARCH})."
 	fi
 }
 
@@ -207,7 +207,7 @@ function installEnteAuthenticator() {
 		sudo dpkg -i ./${PACKAGE}
 		rm ${PACKAGE}
 	else
-		echo "Sorry, Github Desktop is not support on your platform architecture (${ARCH})."
+		echo "Sorry, Github Desktop is not supported on your platform architecture (${ARCH})."
 	fi
 }
 
@@ -225,26 +225,38 @@ function installIcloudNotes() {
     sudo apt install icloud-notes
 }
 
+
+# Microsoft Visual Studio Code
 function installVisualStudioCode() {
 	echo;echo ">>> Installing VisualStudio Code"
-	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-	sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/   
-	sudo sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'   
-	sudo apt update
-	sudo apt install code
+	if [[ $ARCH == "amd64" || $ARCH == "arm64" || $ARCH == "armhf" ]] ; then
+		wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+		sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/   
+		sudo sh -c 'echo "deb [arch=${ARCH} signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'   
+		sudo apt update
+		sudo apt install code
+	else
+		echo "Sorry, VisualStudio Code is not supported on your platform architecture (${ARCH})."
+	fi
 }
 
+
+
+# Adwaita theme for old GTK3 apps
 function installAdwGtk3() {
-	echo;echo ">>> Installing and enabling libAdwaita theme for GTK3"
+	echo;echo ">>> Installing libAdwaita theme for GTK3"
 	curl -s https://julianfairfax.codeberg.page/package-repo/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/julians-package-repo.gpg
 	echo 'deb [ signed-by=/usr/share/keyrings/julians-package-repo.gpg ] https://julianfairfax.codeberg.page/package-repo/debs packages main' | sudo tee /etc/apt/sources.list.d/julians-package-repo.list
 	sudo apt update
-	sudo apt install awd-gtk3 -y
-	gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3' && gsettings set org.gnome.desktop.interface color-scheme 'default'
-	# To revert to the default GTK3 theme, use:
-	# gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita' && gsettings set org.gnome.desktop.interface color-scheme 'default'
+	sudo apt install adw-gtk3 -y
+	echo
+	echo "Note: Please use gnome-tweaks to change Legacy applications theme to Adw-gtk3."
+	echo -n "Press RETURN to continue "
+	read CONT
 }
 
+
+# Angry IP Scanner, depends on Java runtime
 function installAngryIpScanner() {
 	echo;echo ">>> Installing Angry IP Scanner"
 	VERSION=3.9.2
@@ -261,6 +273,15 @@ function installAngryIpScanner() {
 	sudo apt install default-jre -y
 	sudo dpkg -i ./${PACKAGE}
 	rm $PACKAGE
+}
+
+
+
+# Nice looking icon theme
+function installPapirusIconTheme() {
+	sudo apt instal papirus-icon-theme -y
+	gsettings set org.gnome.desktop.interface icon-theme 'Papirus'
+   
 }
 
 
@@ -303,3 +324,4 @@ ARCH=$(dpkg --print-architecture)
 #installIcloudNotes
 #installVisualStudioCode
 #installAngryIpScanner
+#installPapirusIconTheme
