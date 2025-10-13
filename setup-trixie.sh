@@ -248,15 +248,13 @@ function installVisualStudioCode() {
 
 # Adwaita theme for old GTK3 apps
 function installAdwGtk3() {
-	echo;echo ">>> Installing libAdwaita theme for GTK3"
+	echo;echo ">>> Installing and setting libAdwaita theme for GTK3"
 	curl -s https://julianfairfax.codeberg.page/package-repo/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/julians-package-repo.gpg
 	echo 'deb [ signed-by=/usr/share/keyrings/julians-package-repo.gpg ] https://julianfairfax.codeberg.page/package-repo/debs packages main' | sudo tee /etc/apt/sources.list.d/julians-package-repo.list
 	sudo apt update
 	sudo apt install adw-gtk3 -y
-	echo
-	echo "Note: Please use gnome-tweaks to change Legacy applications theme to Adw-gtk3."
-	echo -n "Press RETURN to continue "
-	read CONT
+	gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3' 
+	gsettings set org.gnome.desktop.interface color-scheme 'default'
 }
 
 
