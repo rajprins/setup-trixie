@@ -24,4 +24,4 @@ sudo /usr/sbin/mkswap /swapfile
 sudo /usr/sbin/swapon /swapfile
 
 # To make the swap file permanent, we need to add it to the /etc/fstab file.
-sudo echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+echo "/swapfile swap swap defaults 0 0" | sudo tee -a /etc/fstab
