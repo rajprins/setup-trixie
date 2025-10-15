@@ -109,7 +109,7 @@ function installOpensnitch() {
 	if [[ $ARCH == "amd64" || $ARCH == "arm64" ]] ; then
 		wget https://github.com/evilsocket/opensnitch/releases/download/v${VERSION}/python3-opensnitch-ui_$VERSION-1_all.deb
 		wget https://github.com/evilsocket/opensnitch/releases/download/v${VERSION}/opensnitch_$VERSION-1_${ARCH}.deb
-		sudo apt install ./opensnitch_$VERSION-1_amd64.deb ./python3-opensnitch-ui_$VERSION-1_all.deb -y
+		sudo apt install ./opensnitch_$VERSION-1_${ARCH}.deb ./python3-opensnitch-ui_$VERSION-1_all.deb -y
 		rm python3-opensnitch-ui_$VERSION-1_all.deb
 		rm opensnitch_$VERSION-1_${ARCH}.deb
 	else
@@ -118,24 +118,30 @@ function installOpensnitch() {
 }
 
 
-### Tor Browser, x86 only
+### Tor Browser, only AMD64 officially supported. Unofficial ARM port is available.
 function installTorBrowser() {
 	echo;echo ">>> Installing Tor Browser and dependencies"
 	local VERSION=14.5.7
 	if [[ $ARCH == "amd64" ]] ; then
+		local VERSION=15.0a3
 		local PACKAGE=tor-browser-linux-x86_64-${VERSION}.tar.xz
+		local URL=https://www.torproject.org/dist/torbrowser/${VERSION}/${PACKAGE}
+	elif [[ $ARCH == "arm64" ]] ; then
+		local VERSION=14.5a1
+		local PACKAGE=tor-browser-linux-aarch64-${VERSION}.tar.xz
+		local URL=https://github.com/tnt2k/tor-browser-arm64/releases/download/Tor-Browser/${PACKAGE}
 	else
-		local PACKAGE=tor-browser-linux64-${version}_ALL.tar.xz
+		echo "Sorry, Tor Browser is not supported on your platform architecture (${ARCH})."
+		return 1
 	fi
 	#
-	wget -q https://www.torproject.org/dist/torbrowser/${VERSION}/${PACKAGE}
+	wget $URL
 	tar -xvJf $PACKAGE
 	sudo mv tor-browser /usr/local/share/
 	cd /usr/local/share/tor-browser
 	sudo chmod +x start-tor-browser.desktop
 	./start-tor-browser.desktop --register-app
 	rm $PACKAGE
-
 }
 
 
@@ -282,7 +288,8 @@ function installAngryIpScanner() {
 
 # Nice looking icon theme
 function installPapirusIconTheme() {
-	sudo apt instal papirus-icon-theme -y
+	echo;echo ">>> Installing and setting Papirus icon theme"
+	sudo apt install papirus-icon-theme -y
 	gsettings set org.gnome.desktop.interface icon-theme 'Papirus'
 }
 
@@ -292,6 +299,13 @@ function installPapirusIconTheme() {
 function installPaperIconTheme() {
 	sudo apt instal paper-icon-theme -y
 	gsettings set org.gnome.desktop.interface icon-theme 'Paper'
+}
+
+
+# Gimp image editor
+function installGimp() {
+	echo;echo ">>> Installing GIMP image editor"
+	sudo apt install gimp gimp-data gimp-data-extras -y
 }
 
 
@@ -335,3 +349,4 @@ ARCH=$(dpkg --print-architecture)
 #installVisualStudioCode
 #installAngryIpScanner
 #installPaperIconTheme
+#installGimp
