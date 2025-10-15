@@ -200,7 +200,7 @@ function installSignal() {
 }
 
 
-### Enter OPT Authenticator, x86 only
+### Ente Authenticator, x86 only
 function installEnteAuthenticator() {
 	echo;echo ">>> Installing Ente Authenticator"
 	if [[ $ARCH == "amd64" ]] ; then
@@ -210,20 +210,17 @@ function installEnteAuthenticator() {
 		sudo dpkg -i ./${PACKAGE}
 		rm ${PACKAGE}
 	else
-		echo "Sorry, Github Desktop is not supported on your platform architecture (${ARCH})."
+		echo "Sorry, Ente Auth is not supported on your platform architecture (${ARCH})."
 	fi
 }
 
 
 ### Client for iCloud Notes
-#
-# note: PGP URL returns a 404, so installation is broken!
-#
 function installIcloudNotes() {
 	echo;echo ">>> Installing iCloud Notes client"
     sudo apt install curl
-    sudo curl -fsSLo /usr/share/keyrings/himel.gpg https://mirror.himelrana.com/himel.gpg
-    echo "deb [signed-by=/usr/share/keyrings/himel.gpg] https://mirror.himelrana.com/ stable main"|sudo tee /etc/apt/sources.list.d/himel-release.list
+ 	sudo curl -fsSLo /usr/share/keyrings/himel.gpg https://66355b217734305f6607e3f6--mirror-himelrana.netlify.app/himel.gpg
+ 	echo "deb [signed-by=/usr/share/keyrings/himel.gpg] https://66355b217734305f6607e3f6--mirror-himelrana.netlify.app/ stable main"|sudo tee /etc/apt/sources.list.d/himel-release.list
     sudo apt update
     sudo apt install icloud-notes
 }
@@ -287,7 +284,14 @@ function installAngryIpScanner() {
 function installPapirusIconTheme() {
 	sudo apt instal papirus-icon-theme -y
 	gsettings set org.gnome.desktop.interface icon-theme 'Papirus'
-   
+}
+
+
+
+# Nice looking icon theme
+function installPaperIconTheme() {
+	sudo apt instal paper-icon-theme -y
+	gsettings set org.gnome.desktop.interface icon-theme 'Paper'
 }
 
 
@@ -330,4 +334,4 @@ ARCH=$(dpkg --print-architecture)
 #installIcloudNotes
 #installVisualStudioCode
 #installAngryIpScanner
-#installPapirusIconTheme
+#installPaperIconTheme
