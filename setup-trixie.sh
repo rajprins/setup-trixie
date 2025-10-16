@@ -309,6 +309,14 @@ function installGimp() {
 }
 
 
+
+# Firefox theme to match Gnome look and feel
+function installFirefoxGnomeTheme() {
+	echo;echo ">>> Installing Firefox Gnome-like theme"
+	curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
+}
+
+
 ################################################################################
 # Main
 ################################################################################
@@ -350,3 +358,4 @@ ARCH=$(dpkg --print-architecture)
 #installAngryIpScanner
 #installPaperIconTheme
 #installGimp
+#installFirefoxGnomeTheme
