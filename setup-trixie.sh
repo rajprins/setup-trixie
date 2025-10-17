@@ -317,6 +317,29 @@ function installFirefoxGnomeTheme() {
 }
 
 
+# Simplex chat app
+function installSimplex() {
+	echo;echo ">>> Installing Simplex"
+	if [[ $ARCH == "amd64" ]] ; then
+		#local PACKAGE=simplex-desktop-ubuntu-22_04-x86_64.deb
+		local PACKAGE=simplex-desktop-ubuntu-24_04-x86_64.deb
+		local URL=https://github.com/simplex-chat/simplex-chat/releases/latest/download/${PACKAGE}
+		wget $URL
+		sudo dpkg -i ./${PACKAGE}
+		rm $PACKAGE
+	elif [[ $ARCH == "arm64" ]] ; then
+				#local PACKAGEsimplex-desktop-ubuntu-22_04-aarch64.deb
+		local PACKAGE=simplex-desktop-ubuntu-24_04-aarch64.deb
+		local URL=https://github.com/simplex-chat/simplex-chat/releases/latest/download/${PACKAGE}
+		wget $URL
+		sudo dpkg -i ./${PACKAGE}
+		rm $PACKAGE
+	else
+		echo "Sorry, Simplex is not supported on your platform architecture (${ARCH})."
+	fi
+}
+
+
 ################################################################################
 # Main
 ################################################################################
@@ -359,3 +382,4 @@ ARCH=$(dpkg --print-architecture)
 #installPaperIconTheme
 #installGimp
 #installFirefoxGnomeTheme
+#installSimplex
