@@ -13,11 +13,16 @@ function setAliases() {
 	cat << EOF >> ~/.bash_aliases
 alias edit='/usr/bin/subl'
 alias git-revert='echo '\''Reverting local git repo to origin/master'\'';git fetch origin/master;git reset --hard origin/master'
+alias gs='git status'
+alias gp='git pull'
+alias gc='git commit'
 alias ls='ls --color=auto'
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 alias sudo='sudo -sE'
 alias upd='sudo apt update;sudo apt upgrade -y;sudo apt autoremove -y'
+alias sai='sudo apt install'
+alias sap='sudo apt purge --autoremove'
 EOF
 }
 
@@ -39,7 +44,17 @@ EOF
 ### Install some generic/useful packages
 function installCorePackages() {
 	echo;echo ">>> Installing core utilities"
-	sudo apt install mc curl wget synaptic xsel -y
+	sudo apt install mc curl wget synaptic xsel thunderbird  -y
+}
+
+
+function tweakGnome() {
+	echo;echo ">>> Installing Gnome tweaks and extensions"
+	sudo apt install gnome-tweaks gnome-shell-extension-manager gnome-shell-extension-dashtodock gnome-shell-extension-appindicator -y
+	installAdwGtk3
+	installAdwaitaQt6
+	installPaperIconTheme
+
 }
 
 
@@ -261,6 +276,16 @@ function installAdwGtk3() {
 }
 
 
+
+# Adwaita theme for QT
+function installAdwaitaQt6() {
+	echo;echo ">>> Installing Adwaita theme for Qt6"
+	sudo apt install -y adwaita-qt6	qt6ct
+	echo "QT_QPA_PLATFORMTHEME=qt6ct" | sudo tee -a /etc/environment
+}
+
+
+
 # Angry IP Scanner, depends on Java runtime
 function installAngryIpScanner() {
 	echo;echo ">>> Installing Angry IP Scanner"
@@ -297,7 +322,7 @@ function installPapirusIconTheme() {
 
 # Nice looking icon theme
 function installPaperIconTheme() {
-	sudo apt instal paper-icon-theme -y
+	sudo apt install paper-icon-theme -y
 	gsettings set org.gnome.desktop.interface icon-theme 'Paper'
 }
 
@@ -355,15 +380,15 @@ fi
 
 ARCH=$(dpkg --print-architecture)
 
-### Local configuration
+### Configuration
 #setAptSources
 #setShellConfig
 #setAliases
-
-
-### Installing packages, global
 #installCorePackages
-#installAdwGtk3
+#tweakGnome
+
+
+### Installing packages
 #installRPImager
 #installSublime
 #installBrave
@@ -379,7 +404,6 @@ ARCH=$(dpkg --print-architecture)
 #installIcloudNotes
 #installVisualStudioCode
 #installAngryIpScanner
-#installPaperIconTheme
 #installGimp
 #installFirefoxGnomeTheme
 #installSimplex
