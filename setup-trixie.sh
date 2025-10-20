@@ -364,6 +364,20 @@ function installSimplex() {
 	fi
 }
 
+function installBalenaEtcher() {
+	echo;echo ">>> Installing Balena Etcher"
+	if [[ $ARCH == "amd64" ]] ; then
+		VERSION="2.1.4"
+		PACKAGE=balena-etcher_${VERSION}_amd64.deb
+		URL="https://github.com/balena-io/etcher/releases/download/v${VERSION}/${PACKAGE}"
+		wget $URL
+		sudo dpkg -i ./${PACKAGE}
+		rm $PACKAGE
+	else
+		echo "Sorry, Balena Etcher is not supported on your platform architecture (${ARCH})."
+	fi
+}
+
 
 ################################################################################
 # Main
@@ -407,3 +421,4 @@ ARCH=$(dpkg --print-architecture)
 #installGimp
 #installFirefoxGnomeTheme
 #installSimplex
+#installBalenaEtcher
