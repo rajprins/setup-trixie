@@ -379,6 +379,23 @@ function installBalenaEtcher() {
 }
 
 
+function installFreeLens() {
+	#https://github.com/freelensapp/freelens/releases/download/v1.6.1/Freelens-1.6.1-linux-amd64.deb
+	#https://github.com/freelensapp/freelens/releases/download/v1.6.1/Freelens-1.6.1-linux-arm64.deb
+	echo;echo ">>> Installing FreeLens Kubernetes IDE"
+	if [[ $ARCH == "amd64" || $ARCH == "arm64" ]] ; then
+		VERSION=1.6.1
+		PACKAGE=Freelens-${VERSION}-linux-${ARCH}.deb
+		URL=https://github.com/freelensapp/freelens/releases/download/v${VERSION}/${PACKAGE}
+		wget $URL
+		sudo dpkg -i ./${PACKAGE}
+		rm $PACKAGE
+	else
+		echo "Sorry, FreeLens is not supported on your platform architecture (${ARCH})."
+	fi
+}
+
+
 ################################################################################
 # Main
 ################################################################################
@@ -422,3 +439,4 @@ ARCH=$(dpkg --print-architecture)
 #installFirefoxGnomeTheme
 #installSimplex
 #installBalenaEtcher
+#installFreeLens
