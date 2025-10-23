@@ -58,6 +58,16 @@ function tweakGnome() {
 }
 
 
+function installFlatPack() {
+	echo;echo ">>> Installing Flatpack"
+	sudo apt install flatpak gnome-software-plugin-flatpak
+	echo
+	echo "Note: please reboot your machine after completing this script to activate Flatpack on your Debian system"
+	echo -n "Press RETURN to continue..."
+	read CONFIRM
+}
+
+
 ### Sublime Text
 function installSublime() {
 	echo;echo ">>> Installing Sublime Text"
@@ -417,6 +427,7 @@ ARCH=$(dpkg --print-architecture)
 #setAliases
 #installCorePackages
 #tweakGnome
+#installFlatPack
 
 
 ### Installing packages
