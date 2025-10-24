@@ -257,7 +257,7 @@ function installIcloudNotes() {
 }
 
 
-# Microsoft Visual Studio Code
+### Microsoft Visual Studio Code
 function installVisualStudioCode() {
 	echo;echo ">>> Installing VisualStudio Code (might take some time!)"
 	if [[ $ARCH == "amd64" || $ARCH == "arm64" || $ARCH == "armhf" ]] ; then
@@ -274,7 +274,7 @@ function installVisualStudioCode() {
 
 
 
-# Adwaita theme for old GTK3 apps
+### Adwaita theme for old GTK3 apps
 function installAdwGtk3() {
 	echo;echo ">>> Installing and setting libAdwaita theme for GTK3"
 	curl -s https://julianfairfax.codeberg.page/package-repo/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/julians-package-repo.gpg
@@ -287,7 +287,7 @@ function installAdwGtk3() {
 
 
 
-# Adwaita theme for QT
+### Adwaita theme for QT
 function installAdwaitaQt6() {
 	echo;echo ">>> Installing Adwaita theme for Qt6"
 	sudo apt install -y adwaita-qt6	qt6ct
@@ -296,7 +296,7 @@ function installAdwaitaQt6() {
 
 
 
-# Angry IP Scanner, depends on Java runtime
+### Angry IP Scanner, depends on Java runtime
 function installAngryIpScanner() {
 	echo;echo ">>> Installing Angry IP Scanner"
 	VERSION=3.9.2
@@ -321,7 +321,7 @@ function installAngryIpScanner() {
 
 
 
-# Nice looking icon theme
+### Nice looking icon theme
 function installPapirusIconTheme() {
 	echo;echo ">>> Installing and setting Papirus icon theme"
 	sudo apt install papirus-icon-theme -y
@@ -330,14 +330,14 @@ function installPapirusIconTheme() {
 
 
 
-# Nice looking icon theme
+### Nice looking icon theme
 function installPaperIconTheme() {
 	sudo apt install paper-icon-theme -y
 	gsettings set org.gnome.desktop.interface icon-theme 'Paper'
 }
 
 
-# Gimp image editor
+### Gimp image editor
 function installGimp() {
 	echo;echo ">>> Installing GIMP image editor"
 	sudo apt install gimp gimp-data gimp-data-extras -y
@@ -345,14 +345,14 @@ function installGimp() {
 
 
 
-# Firefox theme to match Gnome look and feel
+### Firefox theme to match Gnome look and feel
 function installFirefoxGnomeTheme() {
 	echo;echo ">>> Installing Firefox Gnome-like theme"
 	curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
 }
 
 
-# Simplex chat app
+### Simplex chat app
 function installSimplex() {
 	echo;echo ">>> Installing Simplex"
 	if [[ $ARCH == "amd64" ]] ; then
@@ -374,6 +374,8 @@ function installSimplex() {
 	fi
 }
 
+
+### Balena Etcher
 function installBalenaEtcher() {
 	echo;echo ">>> Installing Balena Etcher"
 	if [[ $ARCH == "amd64" ]] ; then
@@ -389,6 +391,7 @@ function installBalenaEtcher() {
 }
 
 
+### FreeLens Kubernetes IDE
 function installFreeLens() {
 	#https://github.com/freelensapp/freelens/releases/download/v1.6.1/Freelens-1.6.1-linux-amd64.deb
 	#https://github.com/freelensapp/freelens/releases/download/v1.6.1/Freelens-1.6.1-linux-arm64.deb
@@ -404,6 +407,8 @@ function installFreeLens() {
 		echo "Sorry, FreeLens is not supported on your platform architecture (${ARCH})."
 	fi
 }
+
+
 
 
 ################################################################################
