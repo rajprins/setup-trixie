@@ -206,13 +206,19 @@ function installSlack() {
 }
 
 
-### Github Desktop, x86 only
+### Github Desktop
 function installGithubDesktop() {
 	echo;echo ">>> Installing Github Desktop"
 	if [[ $ARCH == "amd64" ]] ; then
 		wget -qO - https://mirror.mwt.me/shiftkey-desktop/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/mwt-desktop.gpg > /dev/null
 		sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/mwt-desktop.gpg] https://mirror.mwt.me/shiftkey-desktop/deb/ any main" > /etc/apt/sources.list.d/mwt-desktop.list'
 		sudo apt update && sudo apt install github-desktop -y
+	elif [[ $ARCH == "arm64" ]] ; then
+		local VERSION=3.4.13-linux1
+		local PACKAGE=GitHubDesktop-linux-arm64-${VERSION}.deb
+		wget https://github.com/shiftkey/desktop/releases/download/release-${VERSION}/${PACKAGE}
+		sudo apt install ./${PACKAGE}
+		rm $PACKAGE
 	else
 		echo "Sorry, Github Desktop is not supported on your platform architecture (${ARCH})."
 	fi
