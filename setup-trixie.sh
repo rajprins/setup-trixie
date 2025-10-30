@@ -21,8 +21,8 @@ alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 alias sudo='sudo -sE'
 alias upd='sudo apt update;sudo apt upgrade -y;sudo apt autoremove -y'
-alias sai='sudo apt install'
-alias sap='sudo apt purge --autoremove'
+alias sai='sudo apt install -y'
+alias sap='sudo apt purge --autoremove -y'
 EOF
 }
 
@@ -44,7 +44,17 @@ EOF
 ### Install some generic/useful packages
 function installCorePackages() {
 	echo;echo ">>> Installing core utilities"
-	sudo apt install mc curl wget synaptic xsel thunderbird  -y
+	sudo apt install mc curl wget synaptic xsel  -y
+}
+
+
+function installFontsInter() {
+	echo;echo ">>> Installing and setting Inter fonts"
+	sai fonts-inter fonts-inter-variable
+	gsettings set org.gnome.desktop.interface font-name "Inter Variable 11"
+	gsettings set org.gnome.desktop.interface document-font-name "Inter Variable 11"
+	gsettings set org.gnome.desktop.interface font-hinting "full"
+	gsettings set org.gnome.desktop.interface font-antialiasing "rgba"
 }
 
 
@@ -53,8 +63,12 @@ function tweakGnome() {
 	sudo apt install gnome-tweaks gnome-shell-extension-manager gnome-shell-extension-dashtodock gnome-shell-extension-appindicator -y
 	installAdwGtk3
 	installAdwaitaQt6
+	installFontsInter
 	installPaperIconTheme
-
+	gsettings set org.gnome.desktop.interface clock-format "24h"
+	gsettings set org.gnome.desktop.interface show-battery-percentage true
+	# Enable minimize, maximize and close toolbar buttons
+	gsettings set org.gnome.desktop.wm.preferences button-layout ":minimize,maximize,close"
 }
 
 
@@ -431,6 +445,8 @@ if [[ $ID != "debian" ]]; then
 fi
 
 ARCH=$(dpkg --print-architecture)
+
+alias sai='sudo apt install -y'
 
 ### Configuration
 #setAptSources
