@@ -72,11 +72,20 @@ function tweakGnome() {
 }
 
 
-function installFlatPack() {
-	echo;echo ">>> Installing Flatpack"
+function installFlatpak() {
+	echo;echo ">>> Installing Flatpak"
 	sudo apt install flatpak gnome-software-plugin-flatpak
 	echo
-	echo "Note: please reboot your machine after completing this script to activate Flatpack on your Debian system"
+	echo "Note: please reboot your machine after completing this script to activate Flatpak on your Debian system"
+	echo -n "Press RETURN to continue..."
+	read CONFIRM
+}
+
+function installSnap() {
+	echo;echo ">>> Installing Snap"
+	sudo apt install -y snapd gnome-software-plugin-snap
+	echo
+	echo "Note: please reboot your machine after completing this script to activate Snapd on your Debian system"
 	echo -n "Press RETURN to continue..."
 	read CONFIRM
 }
@@ -429,6 +438,11 @@ function installFreeLens() {
 }
 
 
+### Cockpit linux systems management software
+function installCockpit() {
+    echo;echo ">>> Installing Cockpit web-based graphical systems management interface"
+    sudo apt install cockpit cockpit-networkmanager cockpit-system cockpit-packagekit cockpit-doc cockpit-sosreport  python3-pcp  udisks2-btrfs  udisks2-lvm2  mdadm  lastlog2  sssd-dbus
+}
 
 
 ################################################################################
@@ -454,7 +468,8 @@ alias sai='sudo apt install -y'
 #setAliases
 #installCorePackages
 #tweakGnome
-#installFlatPack
+#installFlatpak
+#installSnap
 
 
 ### Installing packages
@@ -478,3 +493,4 @@ alias sai='sudo apt install -y'
 #installSimplex
 #installBalenaEtcher
 #installFreeLens
+#installCockpit
