@@ -301,7 +301,6 @@ function installVisualStudioCode() {
 }
 
 
-
 ### Adwaita theme for old GTK3 apps
 function installAdwGtk3() {
 	echo;echo ">>> Installing and setting libAdwaita theme for GTK3"
@@ -314,14 +313,12 @@ function installAdwGtk3() {
 }
 
 
-
 ### Adwaita theme for QT
 function installAdwaitaQt6() {
 	echo;echo ">>> Installing Adwaita theme for Qt6"
 	sai adwaita-qt6	qt6ct
 	echo "QT_QPA_PLATFORMTHEME=qt6ct" | sudo tee -a /etc/environment
 }
-
 
 
 ### Angry IP Scanner, depends on Java runtime
@@ -443,7 +440,7 @@ function installCockpit() {
 
 ### CursorAI IDE
 function installCursorAI() {
-	echo;echo ">>> Installing FreeLens Kubernetes IDE"
+	echo;echo ">>> Installing CursorAI IDE"
 	if [[ $ARCH == "arm64" ]] ; then
 		local PACKAGE=cursor_2.0.34_arm64.deb
 		local URL=https://downloads.cursor.com/production/45fd70f3fe72037444ba35c9e51ce86a1977ac11/linux/arm64/deb/arm64/deb/${PACKAGE}
