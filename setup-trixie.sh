@@ -348,14 +348,12 @@ function installAngryIpScanner() {
 }
 
 
-
 ### Nice looking icon theme
 function installPapirusIconTheme() {
 	echo;echo ">>> Installing and setting Papirus icon theme"
 	sai papirus-icon-theme
 	gsettings set org.gnome.desktop.interface icon-theme 'Papirus'
 }
-
 
 
 ### Nice looking icon theme
@@ -370,7 +368,6 @@ function installGimp() {
 	echo;echo ">>> Installing GIMP image editor"
 	sai gimp gimp-data gimp-data-extras
 }
-
 
 
 ### Firefox theme to match Gnome look and feel
@@ -444,6 +441,28 @@ function installCockpit() {
 }
 
 
+### CursorAI IDE
+function installCursorAI() {
+	echo;echo ">>> Installing FreeLens Kubernetes IDE"
+	if [[ $ARCH == "arm64" ]] ; then
+		local PACKAGE=cursor_2.0.34_arm64.deb
+		local URL=https://downloads.cursor.com/production/45fd70f3fe72037444ba35c9e51ce86a1977ac11/linux/arm64/deb/arm64/deb/${PACKAGE}
+		wget $URL
+		sudo dpkg -i ./${PACKAGE}
+		rm $PACKAGE
+	elif [[ $ARCH == "amd64" ]] ; then
+		local PACKAGE=cursor_2.0.34_amd64.deb
+		local URL=https://downloads.cursor.com/production/45fd70f3fe72037444ba35c9e51ce86a1977ac11/linux/x64/deb/amd64/deb/${PACKAGE}
+		wget $URL
+		sudo dpkg -i ./${PACKAGE}
+		rm $PACKAGE
+	else
+		echo "Sorry, Cursor AI is not supported on your platform architecture (${ARCH})."
+	fi
+}
+
+
+
 ################################################################################
 # Main
 ################################################################################
@@ -493,6 +512,7 @@ alias sai='sudo apt install -y'
 #installBalenaEtcher
 #installFreeLens
 #installCockpit
+#installCursorAI
 
 # Rewrites apt repo sources files to new structure
 # Best to leave this uncommented.
