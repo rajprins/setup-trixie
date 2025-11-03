@@ -459,6 +459,21 @@ function installCursorAI() {
 }
 
 
+### VirtualBox
+function installVirtualBox() {
+    echo;echo ">>> Installing Oracle VirtualBox 7.x"
+	if [[ $ARCH == "amd64" ]] ; then
+		echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian trixie contrib" | sudo tee -a /etc/apt/sources.list
+		# The Oracle public key for verifying the signatures can be downloaded here. You can add these keys with
+		wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg --dearmor
+		sudo apt-get update
+		sudo apt install -y virtualbox-7.1
+	else
+		echo "Sorry, VirtualBox 7 is not supported on your platform architecture (${ARCH})."
+	fi
+}
+
+
 
 ################################################################################
 # Main
@@ -510,6 +525,7 @@ alias sai='sudo apt install -y'
 #installFreeLens
 #installCockpit
 #installCursorAI
+#installVirtualBox
 
 # Rewrites apt repo sources files to new structure
 # Best to leave this uncommented.
