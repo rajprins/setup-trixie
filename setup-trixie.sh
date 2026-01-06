@@ -44,13 +44,13 @@ EOF
 ### Install some generic/useful packages
 function installCorePackages() {
 	echo;echo ">>> Installing core utilities"
-	sai mc curl wget synaptic xsel
+	sudo apt install mc curl wget synaptic xsel -y
 }
 
 
 function installFontsInter() {
 	echo;echo ">>> Installing and setting Inter fonts"
-	sai fonts-inter fonts-inter-variable
+	sudo apt install -y fonts-inter fonts-inter-variable
 	gsettings set org.gnome.desktop.interface font-name "Inter Variable 11"
 	gsettings set org.gnome.desktop.interface document-font-name "Inter Variable 11"
 	gsettings set org.gnome.desktop.interface font-hinting "full"
@@ -74,18 +74,9 @@ function tweakGnome() {
 
 function installFlatpak() {
 	echo;echo ">>> Installing Flatpak"
-	sai flatpak gnome-software-plugin-flatpak
+	sudo apt install -y flatpak gnome-software-plugin-flatpak
 	echo
 	echo "Note: please reboot your machine after completing this script to activate Flatpak on your Debian system"
-	echo -n "Press RETURN to continue..."
-	read CONFIRM
-}
-
-function installSnap() {
-	echo;echo ">>> Installing Snap"
-	sai snapd gnome-software-plugin-snap
-	echo
-	echo "Note: please reboot your machine after completing this script to activate Snapd on your Debian system"
 	echo -n "Press RETURN to continue..."
 	read CONFIRM
 }
@@ -97,7 +88,7 @@ function installSublime() {
 	wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo tee /etc/apt/keyrings/sublimehq-pub.asc > /dev/null
 	echo -e 'Types: deb\nURIs: https://download.sublimetext.com/\nSuites: apt/stable/\nSigned-By: /etc/apt/keyrings/sublimehq-pub.asc' | sudo tee /etc/apt/sources.list.d/sublime-text.sources
 	sudo apt update
-	sai sublime-text
+	sudo apt install -y sublime-text
 }
 
 
@@ -107,7 +98,7 @@ function installBrave() {
 	sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
 	sudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
 	sudo apt update
-	sai brave-browser
+	sudo apt install -y brave-browser
 }
 
 
@@ -115,7 +106,7 @@ function installBrave() {
 function installTor() {
 	echo;echo ">>> Installing Tor"
 	# Install Tor and useful packages
-	sai apt-transport-https gnupg tor
+	sudo apt install -y apt-transport-https gnupg tor
 	# We don't want Tor to load automatically upon startup
 	sudo systemctl disable tor
 }
@@ -125,7 +116,7 @@ function installTor() {
 function installTorBrowser() {
 	echo;echo ">>> Installing Tor Browser and dependencies"
 	if [[ $ARCH == "amd64" ]] ; then
-		local VERSION=15.0
+		local VERSION=15.0.3
 		local PACKAGE=tor-browser-linux-x86_64-${VERSION}.tar.xz
 		local URL=https://www.torproject.org/dist/torbrowser/${VERSION}/${PACKAGE}
 	elif [[ $ARCH == "arm64" ]] ; then
@@ -143,7 +134,7 @@ function installTorBrowser() {
 	cd /usr/local/share/tor-browser
 	sudo chmod +x start-tor-browser.desktop
 	./start-tor-browser.desktop --register-app
-	rm $PACKAGE
+	rm -rf ${PACKAGE}*
 }
 
 
@@ -155,7 +146,7 @@ function installProton() {
 	wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/$PACKAGE
 	sudo dpkg -i ./${PACKAGE}
 	sudo apt update
-	sai proton-vpn-gnome-desktop libayatana-appindicator3-1 gir1.2-ayatanaappindicator3-0.1 gnome-shell-extension-appindicator
+	sudo apt install -y proton-vpn-gnome-desktop libayatana-appindicator3-1 gir1.2-ayatanaappindicator3-0.1 gnome-shell-extension-appindicator
 	rm $PACKAGE
 }
 
@@ -166,7 +157,7 @@ function installRPImager() {
 	if [[ $ARCH == "amd64" ]] ; then
 		local PACKAGE=imager_latest_amd64.deb
 		wget https://downloads.raspberrypi.com/imager/$PACKAGE
-		sai libfuse2t64
+		sudo apt install -y libfuse2t64
 		sudo dpkg -i $PACKAGE
 		rm $PACKAGE
 	else
@@ -182,7 +173,7 @@ function installOpensnitch() {
 	if [[ $ARCH == "amd64" || $ARCH == "arm64" ]] ; then
 		wget https://github.com/evilsocket/opensnitch/releases/download/v${VERSION}/python3-opensnitch-ui_$VERSION-1_all.deb
 		wget https://github.com/evilsocket/opensnitch/releases/download/v${VERSION}/opensnitch_$VERSION-1_${ARCH}.deb
-		sai ./opensnitch_$VERSION-1_${ARCH}.deb ./python3-opensnitch-ui_$VERSION-1_all.deb
+		sudo apt install -y ./opensnitch_$VERSION-1_${ARCH}.deb ./python3-opensnitch-ui_$VERSION-1_all.deb
 		rm python3-opensnitch-ui_$VERSION-1_all.deb
 		rm opensnitch_$VERSION-1_${ARCH}.deb
 	else
@@ -197,7 +188,7 @@ function installGoogleChrome() {
 	if [[ $ARCH == "amd64" ]] ; then
 		local PACKAGE=google-chrome-stable_current_amd64.deb
 		wget https://dl.google.com/linux/direct/${PACKAGE}
-		sai ./${PACKAGE}
+		sudo apt install -y ./${PACKAGE}
 		rm $PACKAGE
 	else
 		echo "Sorry, Google Chrome is not supported on your platform architecture (${ARCH})."
@@ -208,7 +199,7 @@ function installGoogleChrome() {
 ### Thonny Python IDE
 function installThonny() {
 	echo;echo ">>> Installing Thonny Python IDE"
-	sai thonny
+	sudo apt install -y thonny
 }
 
 
@@ -219,7 +210,7 @@ function installSlack() {
 		local VERSION=4.46.96
 		local PACKAGE=slack-desktop-${VERSION}-amd64.deb
 		wget https://downloads.slack-edge.com/desktop-releases/linux/x64/${VERSION}/${PACKAGE}
-		sai ./${PACKAGE}
+		sudo apt install -y ./${PACKAGE}
 		rm $PACKAGE
 	else
 		echo "Sorry, Slack is not supported on your platform architecture (${ARCH})."
@@ -238,7 +229,7 @@ function installGithubDesktop() {
 		local VERSION=3.4.13-linux1
 		local PACKAGE=GitHubDesktop-linux-arm64-${VERSION}.deb
 		wget https://github.com/shiftkey/desktop/releases/download/release-${VERSION}/${PACKAGE}
-		sai ./${PACKAGE}
+		sudo apt install -y ./${PACKAGE}
 		rm $PACKAGE
 	else
 		echo "Sorry, Github Desktop is not supported on your platform architecture (${ARCH})."
@@ -254,7 +245,7 @@ function installSignal() {
 	wget -O signal-desktop.sources https://updates.signal.org/static/desktop/apt/signal-desktop.sources;
 	cat signal-desktop.sources | sudo tee /etc/apt/sources.list.d/signal-desktop.sources > /dev/null
 	sudo apt update
-	sai signal-desktop
+	sudo apt install -y signal-desktop
 	rm signal-desktop-keyring.gpg
 }
 
@@ -281,7 +272,7 @@ function installIcloudNotes() {
  	sudo curl -fsSLo /usr/share/keyrings/himel.gpg https://66355b217734305f6607e3f6--mirror-himelrana.netlify.app/himel.gpg
  	echo "deb [signed-by=/usr/share/keyrings/himel.gpg] https://66355b217734305f6607e3f6--mirror-himelrana.netlify.app/ stable main"|sudo tee /etc/apt/sources.list.d/himel-release.list
     sudo apt update
-    sai icloud-notes
+    sudo apt install -y icloud-notes
 }
 
 
@@ -293,7 +284,7 @@ function installVisualStudioCode() {
 		sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
 		echo "deb [arch=${ARCH} signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list 
 		sudo apt update
-		sai code
+		sudo apt install -y code
 		rm packages.microsoft.gpg
 	else
 		echo "Sorry, VisualStudio Code is not supported on your platform architecture (${ARCH})."
@@ -307,7 +298,7 @@ function installAdwGtk3() {
 	curl -s https://julianfairfax.codeberg.page/package-repo/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/julians-package-repo.gpg
 	echo 'deb [ signed-by=/usr/share/keyrings/julians-package-repo.gpg ] https://julianfairfax.codeberg.page/package-repo/debs packages main' | sudo tee /etc/apt/sources.list.d/julians-package-repo.list
 	sudo apt update
-	sai adw-gtk3
+	sudo apt install -y adw-gtk3
 	gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3' 
 	gsettings set org.gnome.desktop.interface color-scheme 'default'
 }
@@ -316,7 +307,7 @@ function installAdwGtk3() {
 ### Adwaita theme for QT
 function installAdwaitaQt6() {
 	echo;echo ">>> Installing Adwaita theme for Qt6"
-	sai adwaita-qt6	qt6ct
+	sudo apt install -y adwaita-qt6	qt6ct
 	echo "QT_QPA_PLATFORMTHEME=qt6ct" | sudo tee -a /etc/environment
 }
 
@@ -328,14 +319,14 @@ function installAngryIpScanner() {
 	if [[ $ARCH == "amd64" ]] ; then
 		local PACKAGE=ipscan_${VERSION}_amd64.deb
 		local URL=https://github.com/angryip/ipscan/releases/download/${VERSION}/${PACKAGE}
-		sai default-jre
+		sudo apt install -y default-jre
 		wget $URL
 		sudo dpkg -i ./${PACKAGE}
 		rm $PACKAGE
 	elif [[ $ARCH == "arm64" || $ARCH == "armhf" ]] ; then
 		local PACKAGE=ipscan_${VERSION}_all.deb
 		local URL=https://github.com/angryip/ipscan/releases/download/${VERSION}/${PACKAGE}
-		sai default-jre libswt-gtk-4-java libswt-cairo-gtk-4-jni
+		sudo apt install -y default-jre libswt-gtk-4-java libswt-cairo-gtk-4-jni
 		wget $URL
 		sudo dpkg -i ./${PACKAGE}
 		rm $PACKAGE
@@ -348,14 +339,14 @@ function installAngryIpScanner() {
 ### Nice looking icon theme
 function installPapirusIconTheme() {
 	echo;echo ">>> Installing and setting Papirus icon theme"
-	sai papirus-icon-theme
+	sudo apt install -y papirus-icon-theme
 	gsettings set org.gnome.desktop.interface icon-theme 'Papirus'
 }
 
 
 ### Nice looking icon theme
 function installPaperIconTheme() {
-	sai paper-icon-theme
+	sudo apt install -y paper-icon-theme
 	gsettings set org.gnome.desktop.interface icon-theme 'Paper'
 }
 
@@ -363,7 +354,7 @@ function installPaperIconTheme() {
 ### Gimp image editor
 function installGimp() {
 	echo;echo ">>> Installing GIMP image editor"
-	sai gimp gimp-data gimp-data-extras
+	sudo apt install -y gimp gimp-data gimp-data-extras
 }
 
 
@@ -385,7 +376,7 @@ function installSimplex() {
 		sudo dpkg -i ./${PACKAGE}
 		rm $PACKAGE
 	elif [[ $ARCH == "arm64" ]] ; then
-				#local PACKAGEsimplex-desktop-ubuntu-22_04-aarch64.deb
+		#local PACKAGEsimplex-desktop-ubuntu-22_04-aarch64.deb
 		local PACKAGE=simplex-desktop-ubuntu-24_04-aarch64.deb
 		local URL=https://github.com/simplex-chat/simplex-chat/releases/latest/download/${PACKAGE}
 		wget $URL
@@ -434,7 +425,7 @@ function installFreeLens() {
 ### Cockpit linux systems management software
 function installCockpit() {
     echo;echo ">>> Installing Cockpit web-based graphical systems management interface"
-    sai cockpit cockpit-networkmanager cockpit-system cockpit-packagekit cockpit-doc cockpit-sosreport  python3-pcp  udisks2-btrfs  udisks2-lvm2  mdadm  lastlog2  sssd-dbus
+    sudo apt install -y cockpit cockpit-networkmanager cockpit-system cockpit-packagekit cockpit-doc cockpit-sosreport  python3-pcp  udisks2-btrfs  udisks2-lvm2  mdadm  lastlog2  sssd-dbus
 }
 
 
@@ -474,6 +465,20 @@ function installVirtualBox() {
 }
 
 
+### Docker
+function installDocker() {
+	echo;echo ">>> Installing Docker Engine and Docker Compose"
+	sudo apt install -y ca-certificates curl gnupg lsb-release
+	sudo mkdir -p /etc/apt/keyrings
+	curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+	echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	sudo apt update
+	sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	# Add current user to docker group to avoid using 'sudo' with docker commands
+	sudo usermod -aG docker $USER
+}
+
+
 
 ################################################################################
 # Main
@@ -499,7 +504,6 @@ alias sai='sudo apt install -y'
 #installCorePackages
 #tweakGnome
 #installFlatpak
-#installSnap
 
 
 ### Installing packages
@@ -526,7 +530,8 @@ alias sai='sudo apt install -y'
 #installCockpit
 #installCursorAI
 #installVirtualBox
+#installDocker
 
 # Rewrites apt repo sources files to new structure
 # Best to leave this uncommented.
-sudo apt modernize-sources
+#sudo apt modernize-sources
